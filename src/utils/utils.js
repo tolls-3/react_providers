@@ -22,4 +22,31 @@ export const pathGet = (arr1, query) => {
   // `pathGet(a, 'James')` = "a.user.name.firstName"
 
   // ============== CODE GOES BELOW THIS LINE :) ==============
+  if (arr1.constructor !== Object) {
+    throw new TypeError("oops")
+  }
+  var path = []
+  var found = false
+  function search(obj) {
+    for (var key in obj) {
+      path.push(key);
+      if (obj[key] === query) {
+        found = true;
+        break;
+      }
+      if (obj[key].constructor === Object) {
+        search(obj[key]);
+        if (found) break;
+      }
+      path.pop();
+    }
+  }
+  search(arr1)
+  let str = ""
+  for (let i = 0; i < path.length; i++) {
+    str += path[i] + "."
+  }
+  if (str[str.length - 1] === ".")
+    str = str.slice(0, -1);
+  return str
 }
