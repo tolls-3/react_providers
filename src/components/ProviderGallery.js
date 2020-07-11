@@ -74,7 +74,7 @@ class Gallery extends React.Component {
 Gallery.propTypes = {
   startFrom: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.shape({
-    imageUrl: PropTypes.string.isRequired,
+    ///imageUrl: PropTypes.string.isRequired,
     name: PropTypes.string,
     description: PropTypes.string
   })).isRequired,

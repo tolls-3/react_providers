@@ -3,7 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LOADER from '../../assets/loader.svg';
-//import ProviderList from '../ProviderList';
+import ProviderList from '../ProviderList';
+import ApiService from '../../utils/apiService'
 
 class AutoCompleteDropDown extends React.Component {
   constructor(props) {
@@ -11,7 +12,9 @@ class AutoCompleteDropDown extends React.Component {
     this.state = {
       isLoading: false,
       showResults: false,
-      results: []
+      keyword: '',
+      results: [],
+      searchTerm: ''
     };
   }
 
@@ -30,6 +33,16 @@ class AutoCompleteDropDown extends React.Component {
     // The dropdown should only show while the user is typing,
     // and should also cater for situations where no result is available.
     // NOTE: This component should be as reusable as possible.
+    const { value } = event.target;
+    const { searchTerm } = this.state;
+    this.setState({ searchTerm: value }, () => {
+      ApiService.get(ApiService.ENDPOINTS.providers, searchTerm)
+        .then((data) => {
+          this.setState({
+            results: data.data
+          });
+        });
+    })
   }
 
   onResultSelected = (selectedResult) => {
@@ -40,7 +53,7 @@ class AutoCompleteDropDown extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { results, isLoading, searchTerm } = this.state;
     const { placeholder } = this.props;
     return (
       <div className="dropdown active autocomplete-dropdown">
@@ -51,7 +64,7 @@ class AutoCompleteDropDown extends React.Component {
         />
         {isLoading && <img src={LOADER} className="loader" alt="loading" />}
 
-        {/* <ProviderList providers={results} onResultSelected={this.onResultSelected} /> */}
+        {searchTerm && <ProviderList providers={results} onResultSelected={this.onResultSelected} />}
       </div>
     );
   }

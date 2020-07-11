@@ -4,13 +4,15 @@ import Gallery from '../components/ProviderGallery'
 import NewProviderForm from '../components/forms/NewProviderForm';
 import ApiService from '../utils/apiService';
 import LoadingScreen from '../components/common/LoadingScreen';
+import { pathGet } from "../utils/utils"
 
 class ExplorePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      isLoading: false
+      isLoading: false,
+      searchState: ""
     };
   }
 
@@ -36,7 +38,10 @@ class ExplorePage extends React.Component {
     // On input, filter Available Providers based on Name, Address and Type
     //
     // ============== CODE GOES BELOW THIS LINE :) ==============
-    
+
+    this.setState({ searchState: event.target.value })
+    const searchPath = pathGet(this.state.data, this.state.searchState)
+    //console.log(searchPath, "hi")
   }
 
   switchView = () => {
@@ -48,14 +53,14 @@ class ExplorePage extends React.Component {
   }
 
   render() {
-    const { isLoading, data } = this.state;
+    const { isLoading, data, searchState } = this.state;
     return (
       <div className="container">
         <NavBar />
         <div className="content__main">
           <section className="main__top-providers">
             <h2 className="text-header">Our Providers</h2>
-            <div className="flex-row box-shadow" style={{padding:"1rem"}}>
+            <div className="flex-row box-shadow" style={{ padding: "1rem" }}>
               <div>
                 <input
                   type="text"
@@ -63,31 +68,32 @@ class ExplorePage extends React.Component {
                   placeholder="&#xf002; Search with Provider Name, Address, or Type"
                   onChange={this.filterProviders}
                   onInput={this.filterProviders}
+                  value={searchState}
                 />
               </div>
               <div className="layout-switcher">
-                  <i className="fa fa-images active" onClick={this.switchView}></i>
-                  <i className="fa fa-th-large" onClick={this.switchView}></i>
-                  <i className="fa fa-th-list" onClick={this.switchView}></i>
-                </div>
+                <i className="fa fa-images active" onClick={this.switchView}></i>
+                <i className="fa fa-th-large" onClick={this.switchView}></i>
+                <i className="fa fa-th-list" onClick={this.switchView}></i>
+              </div>
             </div>
             {(isLoading || !data) ? (
               <LoadingScreen />
             ) : (
-              <React.Fragment>                
-                <Gallery
-                  items={data.map((item) => ({imageUrl: item.imageUrl, name: item.name, description: item.type}))}
-                />
-              </React.Fragment>
-            )}
+                <React.Fragment>
+                  <Gallery
+                    items={data.map((item) => ({ imageUrl: item.imageUrl, name: item.name, description: item.type }))}
+                  />
+                </React.Fragment>
+              )}
           </section>
           <section className="main__new-provider fixed">
-              <div className="new-provider">
-                <h2 className="text-header">Can't find a Provider?</h2>
-                <p className="text-body">Feel free to recommend a new one.</p>
-                <hr/>
-                <NewProviderForm />
-              </div>
+            <div className="new-provider">
+              <h2 className="text-header">Can't find a Provider?</h2>
+              <p className="text-body">Feel free to recommend a new one.</p>
+              <hr />
+              <NewProviderForm />
+            </div>
           </section>
         </div>
       </div>

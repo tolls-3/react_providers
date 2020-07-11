@@ -31,8 +31,8 @@ class ApiService {
         },
       }
     );
-    response.json().then(function(data) {
-      console.log(data)
+    return response.json().then(function (data) {
+      //console.log(data)
       return data
     });
     //return response.json();
@@ -51,10 +51,16 @@ class ApiService {
     const response = await fetch(
       url, {
       method: 'POST',
-      body: data
+      body: data,
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNTk0MTg1NDczLCJleHAiOjE1OTY3Nzc0NzN9.BNp8WsyYR0WucmfuCxg_hrVZXTrgj0--lwTnyO-IBBg'
+      },
     }
     );
-    return response.json();
+    return response.json().then(function (data) {
+      //console.log(data)
+      return data
+    });
   }
 }
 

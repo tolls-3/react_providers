@@ -23,7 +23,7 @@ export const pathGet = (arr1, query) => {
 
   // ============== CODE GOES BELOW THIS LINE :) ==============
   if (arr1.constructor !== Object) {
-    throw new TypeError("oops")
+    Array(arr1)
   }
   var path = []
   var found = false
